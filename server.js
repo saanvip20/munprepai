@@ -70,7 +70,7 @@ const requireToken = async (req, res, next) => {
 };
 
 
-app.post('`${API_URL}/api/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) return res.status(400).json({ error: 'Email and password are required.' });
@@ -87,7 +87,7 @@ app.post('`${API_URL}/api/login', async (req, res) => {
   }
 });
 
-app.post('`${API_URL}/api/generate-topic', async (req, res) => {
+app.post('/api/generate-topic', async (req, res) => {
   try {
     const completion = await openai.chat.completions.create({
       model: 'gpt-4',
@@ -112,7 +112,7 @@ app.post('`${API_URL}/api/generate-topic', async (req, res) => {
 });
 
 
-app.post('`${API_URL}/api/assess-speech',  async (req, res) => {
+app.post('/api/assess-speech',  async (req, res) => {
   const { speech, topic } = req.body;
   if (!speech || speech.trim().length < 10) return res.status(400).json({ error: 'Provide a valid speech.' });
 
@@ -132,7 +132,7 @@ app.post('`${API_URL}/api/assess-speech',  async (req, res) => {
   }
 });
 
-app.post('`${API_URL}/api/annotate-resolution',  async (req, res) => {
+app.post('/api/annotate-resolution',  async (req, res) => {
   const { resolutionText } = req.body;
   if (!resolutionText || resolutionText.trim().length < 20) return res.status(400).json({ error: 'Provide a valid resolution.' });
 
@@ -155,7 +155,7 @@ app.post('`${API_URL}/api/annotate-resolution',  async (req, res) => {
   }
 });
 
-app.post('`${API_URL}/api/assess-resolution',  async (req, res) => {
+app.post('/api/assess-resolution',  async (req, res) => {
   const { resolutionText } = req.body;
   if (!resolutionText || resolutionText.trim().length < 20) return res.status(400).json({ error: 'Provide a valid resolution.' });
 
@@ -175,7 +175,7 @@ app.post('`${API_URL}/api/assess-resolution',  async (req, res) => {
   }
 });
 
-app.post('`${API_URL}/api/generate-opponent-statement',  async (req, res) => {
+app.post('/api/generate-opponent-statement',  async (req, res) => {
   try {
     const completion = await openai.chat.completions.create({
       model: 'gpt-4',
@@ -192,7 +192,7 @@ app.post('`${API_URL}/api/generate-opponent-statement',  async (req, res) => {
   }
 });
 
-app.post('`${API_URL}/api/assess-rebuttal',  async (req, res) => {
+app.post('/api/assess-rebuttal',  async (req, res) => {
   const { opponentStatement, rebuttal } = req.body;
   if (!opponentStatement || !rebuttal) return res.status(400).json({ error: 'Missing statement or rebuttal.' });
 
@@ -212,7 +212,7 @@ app.post('`${API_URL}/api/assess-rebuttal',  async (req, res) => {
   }
 });
 
-app.post('`${API_URL}/api/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -231,7 +231,7 @@ app.post('`${API_URL}/api/login', async (req, res) => {
   }
 });
 
-app.post('`${API_URL}/api/verify-session', async (req, res) => {
+app.post('/api/verify-session', async (req, res) => {
   const { access_token } = req.body;
 
   if (!access_token) return res.status(401).json({ error: 'No access token provided.' });
@@ -250,7 +250,7 @@ app.post('`${API_URL}/api/verify-session', async (req, res) => {
   }
 });
 
-app.post('`${API_URL}/api/signup', async (req, res) => {
+app.post('/api/signup', async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -291,7 +291,7 @@ app.post('`${API_URL}/api/signup', async (req, res) => {
 });
 
 
-app.post('`${API_URL}/api/forgot-password', async (req, res) => {
+app.post('/api/forgot-password', async (req, res) => {
   const { email } = req.body;
 
   if (!email) {
@@ -314,7 +314,7 @@ app.post('`${API_URL}/api/forgot-password', async (req, res) => {
   }
 });
 
-app.post('`${API_URL}/api/reset-password', async (req, res) => {
+app.post('/api/reset-password', async (req, res) => {
   const { access_token, new_password } = req.body;
 
   if (!access_token || !new_password) {
