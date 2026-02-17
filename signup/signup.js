@@ -1,3 +1,5 @@
+const API_URL = "https://munprepai.onrender.com";
+
 document.getElementById('sign-up-form').addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -6,7 +8,7 @@ document.getElementById('sign-up-form').addEventListener('submit', async (e) => 
   const status = document.getElementById('status');
 
   try {
-    const res = await fetch('http://localhost:3000/api/signup', {
+    const res = await fetch(`${API_URL}/api/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
