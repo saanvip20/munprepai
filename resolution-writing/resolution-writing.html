@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resolution Writing Training</title>
+  <link rel="stylesheet" href="resolution-writing.css" />
+</head>
+<body>
+  <header>
+    <h1>Resolution Writing Training</h1>
+    <p>Master the art of writing effective and diplomatic MUN resolutions</p>
+  </header>
+
+  <main class="content">
+
+    <h2>1. Understand the Purpose of a Resolution</h2>
+    <p>A resolution is a formal document that expresses the position and decisions of a Model United Nations committee. It outlines problems, proposes solutions, and reflects the collective agreement of delegates. Writing an effective resolution requires diplomacy, clarity, and adherence to committee rules.</p>
+
+    <h2>2. Know the Standard Structure of a Resolution</h2>
+    <p>MUN resolutions follow a specific format:</p>
+    <ul>
+      <li><strong>Heading:</strong> Includes the committee name, topic, sponsors, and signatories.</li>
+      <li><strong>Preambulatory Clauses:</strong> These clauses provide background, context, and justification for the actions proposed. They often begin with participial phrases such as "Recognizing," "Recalling," or "Expressing concern."</li>
+      <li><strong>Operative Clauses:</strong> These are the actionable parts of the resolution. Each operative clause proposes a specific measure, beginning with strong verbs such as "Encourages," "Calls upon," or "Establishes."</li>
+    </ul>
+
+    <h2>3. Writing Effective Preambulatory Clauses</h2>
+    <p>Preambulatory clauses should:</p>
+    <ul>
+      <li>Reference relevant international laws, treaties, or past resolutions.</li>
+      <li>Describe the current situation and underlying issues.</li>
+      <li>Build a logical foundation for the operative clauses.</li>
+      <li>Use diplomatic and formal language to maintain a respectful tone.</li>
+    </ul>
+
+    <h2>4. Writing Clear and Actionable Operative Clauses</h2>
+    <p>Operative clauses must:</p>
+    <ul>
+      <li>Be specific and actionable — avoid vague or overly broad statements.</li>
+      <li>Use clear and direct verbs to indicate what the committee proposes to do.</li>
+      <li>Number each operative clause for easy reference during debate.</li>
+      <li>Follow a logical order that flows well and groups related actions.</li>
+    </ul>
+
+    <h2>5. Sponsorship and Signatories</h2>
+    <p>Sponsors are the main authors of the resolution who support its content actively, while signatories show interest in discussing the resolution. It’s important to secure enough sponsors to present your resolution for debate and build consensus among delegates.</p>
+
+    <h2>6. Formatting Tips</h2>
+    <ul>
+      <li>Use consistent and clear numbering or lettering for clauses.</li>
+      <li>Indent preambulatory clauses and operative clauses separately to improve readability.</li>
+      <li>Ensure proper grammar, punctuation, and spelling.</li>
+    </ul>
+
+    <h2>7. Use of Language and Tone</h2>
+    <p>The tone should be formal, diplomatic, and neutral. Avoid emotional language or overly forceful statements. The resolution should persuade through logic and respect, reflecting international diplomacy.</p>
+
+    <h2>8. Referencing International Law and Precedents</h2>
+    <p>Incorporate references to relevant UN charters, international treaties, and previous resolutions to strengthen the credibility of your document and show that your proposals align with international norms.</p>
+
+    <h2>9. Collaboration and Consensus Building</h2>
+    <p>A good resolution reflects a compromise between different positions. Include clauses that encourage cooperation, joint initiatives, and multilateral approaches to the issues discussed.</p>
+
+    <h2>10. Proofreading and Revision</h2>
+    <p>Always review your resolution for clarity, coherence, and correctness. Check for consistency in terminology and formatting. Consider feedback from advisors or peers to improve your draft.</p>
+
+    <h2>Bonus: Common Clause Starters</h2>
+    <p><strong>Preambulatory:</strong> Acknowledging, Alarmed by, Aware of, Deeply concerned, Noting with approval</p>
+    <p><strong>Operative:</strong> Encourages, Urges, Calls for, Establishes, Supports, Recommends, Requests</p>
+
+    <hr />
+
+ 
+    <h2>Try It Yourself: AI Feedback on Your Resolution</h2>
+    <p>Paste your draft resolution below and click <strong>“Get Feedback”</strong> to receive suggestions and highlights from our AI assistant.</p>
+
+    <textarea id="userResolution" rows="10" style="width:100%; border-radius: 10px; padding: 10px; margin-top: 10px; border: 1px solid #ccc;"></textarea><br />
+    <button id="submitResolution">Get Feedback</button>
+
+    <h3>AI Feedback:</h3>
+    <pre id="aiFeedback" class="ai-message"></pre>
+  </main>
+
+  <footer>
+    <p>MUNPrepAI.com</p>
+  </footer>
+
+  <script>
+    document.getElementById('submitResolution').addEventListener('click', async () => {
+      const resolutionText = document.getElementById('userResolution').value;
+      const feedbackBox = document.getElementById('aiFeedback');
+
+      feedbackBox.textContent = "Processing...";
+
+      try {
+        const res = await fetch('http://localhost:3000/api/assess-resolution', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ resolutionText })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          feedbackBox.textContent = data.annotatedText;
+        } else {
+          feedbackBox.textContent = "Server error: " + (data.error || 'Unknown error.');
+        }
+      } catch (err) {
+        feedbackBox.textContent = "Failed to connect to the server. Is it running?";
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MUN Diplomatic Negotiation Prep</title>
+  <link rel="stylesheet" href="diplomatic-negotiations.css" />
+</head>
+<body>
+  <header>
+    <h1>Diplomatic Negotation Prep</h1>
+    <p>Master the art of diplomacy for your next MUN conference</p>
+  </header>
+
+  <main>
+    <section class="main-section">
+      <div class="content-container">
+        <div class="content">
+          <h2>Understanding Diplomacy</h2>
+          <ul>
+            <li>Respect the sovereignty of all delegations</li>
+            <li>Stay true to your country policy and bloc stance</li>
+            <li>Balance assertiveness with cooperation</li>
+            <li>Listen actively and respond strategically</li>
+          </ul>
+
+          <h3>Key Phrases for Negotiation</h3>
+          <ul>
+            <li>"Our delegation is open to collaboration on..."</li>
+            <li>"We understand your concerns and propose..."</li>
+            <li>"To reach consensus, perhaps we could..."</li>
+            <li>"Let us find a middle ground by..."</li>
+          </ul>
+        </div>
+
+        <div class="content">
+          <h2>Building Alliances</h2>
+          <ul>
+            <li>Engage with regional and ideological blocs</li>
+            <li>Seek co-sponsors for your working papers</li>
+            <li>Use informal caucuses to your advantage</li>
+            <li>Maintain professionalism at all times</li>
+          </ul>
+
+          <h3>Handling Conflict</h3>
+          <ul>
+            <li>Defuse tension with calm, diplomatic tone</li>
+            <li>Redirect aggression with constructive proposals</li>
+            <li>Use facts and logic over emotion</li>
+            <li>Appeal to mutual goals</li>
+          </ul>
+        </div>
+        <div class="content ai-tool">
+            <h2>Rebuttal Trainer</h2>
+            <button id="generateOpponentBtn">Generate Opposing Statement</button>
+          
+            <div id="opponentStatement" class="ai-message" style="margin-top:1rem; font-weight:600;"></div>
+          
+            <label for="userRebuttal" style="margin-top:1rem;">Your Rebuttal:</label><br/>
+            <textarea id="userRebuttal" rows="5" placeholder="Type your rebuttal here..." style="width:100%;"></textarea>
+          
+            <button id="submitRebuttalBtn" style="margin-top:0.5rem;">Submit Rebuttal</button>
+          
+            <div id="rebuttalFeedback" class="ai-message" style="margin-top:1rem;"></div>
+          </div>
+          
+          <script>
+            const opponentDiv = document.getElementById('opponentStatement');
+            const userRebuttalInput = document.getElementById('userRebuttal');
+            const feedbackDiv = document.getElementById('rebuttalFeedback');
+          
+            document.getElementById('generateOpponentBtn').onclick = async () => {
+              opponentDiv.textContent = 'Generating opposing statement...';
+              feedbackDiv.textContent = '';
+              userRebuttalInput.value = '';
+          
+              try {
+                const res = await fetch('http://localhost:3000/api/generate-opponent-statement', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                });
+                const data = await res.json();
+                if (res.ok) {
+                  opponentDiv.textContent = data.opponentStatement;
+                } else {
+                  opponentDiv.textContent = 'Failed to generate opposing statement.';
+                }
+              } catch {
+                opponentDiv.textContent = 'Error generating opposing statement.';
+              }
+            };
+          
+            document.getElementById('submitRebuttalBtn').onclick = async () => {
+              const rebuttal = userRebuttalInput.value.trim();
+              const opponentStatement = opponentDiv.textContent;
+          
+              if (!opponentStatement || opponentStatement.startsWith('Generating')) {
+                feedbackDiv.textContent = 'Please generate an opposing statement first.';
+                return;
+              }
+              if (!rebuttal) {
+                feedbackDiv.textContent = 'Please type your rebuttal.';
+                return;
+              }
+          
+              feedbackDiv.textContent = 'Analyzing your rebuttal...';
+          
+              try {
+                const res = await fetch('http://localhost:3000/api/assess-rebuttal', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ opponentStatement, rebuttal }),
+                });
+                const data = await res.json();
+                if (res.ok) {
+                  feedbackDiv.innerHTML = `<strong>Feedback:</strong><br>${data.feedback}`;
+                } else {
+                  feedbackDiv.textContent = data.error || 'Failed to assess rebuttal.';
+                }
+              } catch {
+                feedbackDiv.textContent = 'Error assessing rebuttal.';
+              }
+            };
+          </script>
+          
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    MUNPrepAI.com
+  </footer>
+</body>
+</html>

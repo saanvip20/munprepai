@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Public Speaking Training</title>
+  <link rel="stylesheet" href="public-speaking.css" />
+</head>
+<body>
+  <header>
+    <h1>Public Speaking Training</h1>
+    <p>Enhance your speaking skills with guided tips and practice.</p>
+</div>
+
+
+
+
+
+  </header>
+
+  <section class="main-section">
+    <div class="content-container">
+      <div class="content info">
+        <h2>Welcome to the Public Speaking Course!</h2>
+        <p>Here, you'll find helpful tips and techniques to boost your confidence and improve your speaking abilities for Model United Nations (MUN) conferences and beyond.</p>
+
+        <h3>Key Concepts for creating speeches:</h3>
+        <ul>
+          <li><strong>1. Stay Calm and Confident:</strong> Composure is crucial. Take a deep breath before you speak and stay calm...</li>
+          <li><strong>2. Structure Your Speech:</strong>
+            <ul>
+              <li>Opening: Briefly introduce your country’s stance...</li>
+              <li>Body: Your country’s position, key arguments, supporting data, past actions.</li>
+              <li>Conclusion: Summarize and call for action...</li>
+            </ul>
+          </li>
+          <li><strong>3. Be concise:</strong>
+            <ul>
+              <li>Time is limited. Stick to strong, relevant points aligned with your country's stance.</li>
+            </ul>
+          </li>
+          <li><strong>4. Relate to the larger agenda:</strong> Connect your speech to broader committee goals or resolutions.</li>
+        </ul>
+
+        <h3>Useful Tips:</h3>
+        <ul>
+          <li><strong>Use pre-prepared phrases:</strong>
+            <ul>
+              <li>"In the opinion of [Your country]..."</li>
+              <li>"We strongly urge the committee to consider..."</li>
+              <li>"It is crucial to recognize..."</li>
+              <li>"We stand in solidarity with..."</li>
+            </ul>
+          </li>
+          <li><strong>Adapt to the situation:</strong>
+            <ul><li>Respond to prior delegates’ comments to stay relevant.</li></ul>
+          </li>
+          <li><strong>Incorporate real data:</strong> Quick facts, treaties, or relevant news elevate your speech’s credibility.</li>
+        </ul>
+
+        <h3>Approach to public speaking tips:</h3>
+        <ul>
+          <li><strong>Stay calm and breathe deeply before speaking.</strong></li>
+          <li><strong>Practice in front of others for constructive feedback.</strong></li>
+          <li><strong>Focus on the message, not the fear.</strong></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="ai-speech-trainer">
+    <h2>AI Speech Trainer</h2>
+    <button id="generate-topic">🎯 Generate MUN Topic</button>
+    <p id="mun-topic"></p>
+
+    <div id="speech-input-section" style="display: none;">
+      <textarea id="user-speech" rows="10" cols="80" placeholder="Type your speech here..."></textarea>
+      <p id="timer">Time left: 5:00</p>
+      <button id="submit-speech">Submit Speech</button>
+    </div>
+
+    <div id="ai-feedback"></div>
+  </section>
+
+  <footer>
+    <p>MUNPrepAI.com</p>
+  </footer>
+
+  <script>
+    const generateBtn = document.getElementById('generate-topic');
+    const topicDisplay = document.getElementById('mun-topic');
+    const speechSection = document.getElementById('speech-input-section');
+    const speechInput = document.getElementById('user-speech');
+    const submitBtn = document.getElementById('submit-speech');
+    const timerDisplay = document.getElementById('timer');
+    const feedbackDisplay = document.getElementById('ai-feedback');
+  
+    let timer, timeLeft = 300;
+  
+    generateBtn.addEventListener('click', async () => {
+      try {
+        const res = await fetch('http://localhost:3000/api/generate-topic', { method: 'POST' });
+
+  
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+  
+        const data = await res.json();
+        console.log('Topic from backend:', data.topic);
+  
+        topicDisplay.textContent = `🧠 Topic: ${data.topic}`;
+        speechSection.style.display = 'block';
+        speechInput.value = '';
+        feedbackDisplay.textContent = '';
+        startTimer();
+      } catch (err) {
+        console.error('Failed to fetch topic:', err);
+        topicDisplay.textContent = '❌ Error generating topic.';
+      }
+    });
+  
+    function startTimer() {
+      timeLeft = 300;
+      timerDisplay.textContent = `Time left: 5:00`;
+      clearInterval(timer);
+      timer = setInterval(() => {
+        timeLeft--;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = String(timeLeft % 60).padStart(2, '0');
+        timerDisplay.textContent = `Time left: ${minutes}:${seconds}`;
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          submitBtn.click(); 
+        }
+      }, 1000);
+    }
+  
+    submitBtn.addEventListener('click', async () => {
+      clearInterval(timer);
+      const speech = speechInput.value.trim();
+      const topic = topicDisplay.textContent.replace('🧠 Topic: ', '').trim();
+  
+      if (!speech) {
+        feedbackDisplay.textContent = 'Please enter your speech before submitting.';
+        return;
+      }
+  
+      feedbackDisplay.textContent = '⏳ Processing your speech...';
+      submitBtn.disabled = true;
+  
+      try {
+        const res = await fetch('http://127.0.0.1:3000/api/assess-speech', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ speech, topic })
+        });
+  
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+  
+        const data = await res.json();
+        feedbackDisplay.innerHTML = `<h3>AI Feedback:</h3><p>${data.feedback}</p>`;
+      } catch (err) {
+        console.error('Failed to assess speech:', err);
+        feedbackDisplay.innerHTML = `<p>Error getting feedback.</p>`;
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+
+</body>
+</html>

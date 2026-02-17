@@ -1,0 +1,211 @@
+/* ---------- Reset & Global Styles ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f5f7fa;
+  color: #2c3e50;
+  line-height: 1.6;
+}
+
+/* ---------- Header ---------- */
+header {
+  background-color: #001f3f;
+  color: white;
+  text-align: center;
+  padding: 80px 20px;
+  position: relative;
+}
+
+header h1 {
+  font-size: 3rem;
+  color: #f1c40f;
+  font-family: 'Georgia', serif;
+  margin-bottom: 10px;
+}
+
+header p {
+  font-size: 1.2rem;
+  opacity: 0.95;
+}
+
+/* ---------- User Info & Dropdown ---------- */
+.user-info {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: white;
+  gap: 10px;
+}
+
+.user-info span {
+  font-weight: bold;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.user-info span#user-email {
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.user-info span#user-tokens {
+  background-color: #f1c40f;
+  color: #001f3f;
+}
+
+/* Dropdown */
+#dropdown-toggle {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 30px;
+  right: 0;
+  background-color: white;
+  color: #001f3f;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 150px;
+  z-index: 100;
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #001f3f;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1c40f;
+  color: #001f3f;
+}
+
+.user-info:hover .dropdown-content {
+  display: block;
+}
+
+/* ---------- Main / Course Cards ---------- */
+main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  padding: 50px 20px;
+  background-color: #f4f6f8;
+}
+
+.course-card {
+  background-color: white;
+  width: 280px;
+  padding: 25px;
+  border-left: 6px solid #003366;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.course-card h2 {
+  color: #003366;
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+.course-card p {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.course-card a {
+  display: inline-block;
+  background-color: #f1c40f;
+  color: #001f3f;
+  padding: 10px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  text-align: center;
+}
+
+.course-card a:hover {
+  background-color: #ffd700;
+}
+
+.course-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* ---------- Token Display in Cards ---------- */
+.course-card .token-display {
+  margin-top: 10px;
+  font-weight: bold;
+  background-color: #f1c40f;
+  color: #001f3f;
+  padding: 3px 6px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  align-self: flex-start;
+}
+
+/* ---------- Footer ---------- */
+footer {
+  background-color: #001f3f;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+}
+
+/* ---------- Fade-in Animation ---------- */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+  main {
+    gap: 20px;
+    padding: 30px 10px;
+  }
+
+  .course-card {
+    width: 90%;
+  }
+
+  header h1 {
+    font-size: 2.2rem;
+  }
+
+  header p {
+    font-size: 1rem;
+  }
+}
