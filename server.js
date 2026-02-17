@@ -1,4 +1,4 @@
-const API_URL = "https://munprepai.onrender.com";
+
 
 import express from 'express';
 import cors from 'cors';
