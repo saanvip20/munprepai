@@ -11,7 +11,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(cors({
+  origin: "https://munprepai.vercel.app" 
+}));
 app.use(express.json());
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
