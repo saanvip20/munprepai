@@ -19,3 +19,19 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     if (res.ok) {
       status.textContent = 'Login successful!';
       status.style.color = 'green';
+
+      // Optional: store user info locally
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      // Redirect to learning page
+      window.location.href = '/learn/learn.html';
+    } else {
+      status.textContent = `Error: ${data.error}`;
+      status.style.color = 'red';
+    }
+  } catch (err) {
+    console.error('Login fetch error:', err);
+    status.textContent = 'Error: Could not connect to server';
+    status.style.color = 'red';
+  }
+});
