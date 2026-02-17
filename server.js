@@ -20,20 +20,6 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANO
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-const requireToken = async (req, res, next) => {
-  const { access_token } = req.body;
-
-  if (!access_token) {
-    return res.status(401).json({ error: 'No access token provided.' });
-  }
-
-  try {
-    // 1️⃣ Verify user
-    const { data, error } = await supabase.auth.getUser(access_token);
-
-    if (error || !data.user) {
-      return res.status(401).json({ error: 'Invalid or expired session.' });
-    }
 
     const userId = data.user.id;
 
