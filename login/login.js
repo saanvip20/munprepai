@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const API_URL = "https://munprepai.onrender.com"; // your backend URL
+  const API_URL = "https://munprepai.onrender.com";
   const form = document.getElementById("login-form");
   const status = document.getElementById("status");
 
@@ -30,7 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
       status.textContent = "✅ Login successful!";
       status.style.color = "green";
 
-      localStorage.setItem("user", JSON.stringify(data.user));
+      // STORE SESSION, not just user
+      localStorage.setItem("session", JSON.stringify(data.session));
 
       setTimeout(() => {
         window.location.href = "/learn/learn.html";
@@ -43,3 +44,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
