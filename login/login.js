@@ -1,37 +1,52 @@
-const API_URL = "https://munprepai.onrender.com";
-const status = document.getElementById('status');
+document.addEventListener("DOMContentLoaded", () => {
 
-document.getElementById('login-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
+  const API_URL = "https://munprepai.onrender.com";
+  const form = document.getElementById("login-form");
+  const status = document.getElementById("status");
 
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  try {
-    const res = await fetch(`${API_URL}/api/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    });
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-    const data = await res.json();
+    status.textContent = "Logging in...";
+    status.style.color = "black";
 
-    if (res.ok) {
-      status.textContent = 'Login successful!';
-      status.style.color = 'green';
+    try {
+      const response = await fetch(`${API_URL}/api/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      });
 
-      // Optional: store user info locally
-      localStorage.setItem('user', JSON.stringify(data.user));
+      const data = await response.json();
 
-      // Redirect to learning page
-      window.location.href = '/learn/learn.html';
-    } else {
-      status.textContent = `Error: ${data.error}`;
-      status.style.color = 'red';
+      if (!response.ok) {
+        status.textContent = data.error || "Login failed.";
+        status.style.color = "red";
+        return;
+      }
+
+      status.textContent = "✅ Login successful!";
+      status.style.color = "green";
+
+      // Optional: store user info
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // Redirect after login
+      setTimeout(() => {
+        window.location.href = "/learn/learn.html";
+      }, 1000);
+
+    } catch (error) {
+      console.error("Login error:", error);
+      status.textContent = "Could not connect to server.";
+      status.style.color = "red";
     }
-  } catch (err) {
-    console.error('Login fetch error:', err);
-    status.textContent = 'Error: Could not connect to server';
-    status.style.color = 'red';
-  }
+  });
+
 });
+
