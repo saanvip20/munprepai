@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
       status.style.color = "green";
 
       setTimeout(() => {
-        window.location.href = "/login.html";
+        window.location.href = "/login/login.html";
       }, 1500);
 
     } catch (error) {
