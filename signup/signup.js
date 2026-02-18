@@ -1,38 +1,48 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
+
   const API_URL = "https://munprepai.onrender.com";
-  const status = document.getElementById('status');
+  const form = document.getElementById("signup-form");
+  const status = document.getElementById("status");
 
-  const form = document.getElementById('signup-form');
-  if (!form) return; // safety check
-
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    status.textContent = "Creating account...";
+    status.style.color = "black";
 
     try {
-      const res = await fetch(`${API_URL}/api/signup`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch(`${API_URL}/api/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({ email, password })
       });
 
-      const data = await res.json();
+      const data = await response.json();
 
-      if (res.ok) {
-        status.textContent = 'Sign-up successful! Check your email.';
-        status.style.color = 'green';
-        localStorage.setItem('user', JSON.stringify(data.user));
-        window.location.href = '/login.html';
-      } else {
-        status.textContent = `Error: ${data.error}`;
-        status.style.color = 'red';
+      if (!response.ok) {
+        status.textContent = data.error || "Signup failed.";
+        status.style.color = "red";
+        return;
       }
-    } catch (err) {
-      console.error('Signup fetch error:', err);
-      status.textContent = 'Error: Could not connect to server';
-      status.style.color = 'red';
+
+      status.textContent = "✅ Signup successful! Check your email if confirmation is enabled.";
+      status.style.color = "green";
+
+      setTimeout(() => {
+        window.location.href = "/login.html";
+      }, 1500);
+
+    } catch (error) {
+      console.error("Signup error:", error);
+      status.textContent = "Could not connect to server.";
+      status.style.color = "red";
     }
   });
+
 });
+
