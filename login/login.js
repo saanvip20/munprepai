@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-
-  const API_URL = "https://munprepai.onrender.com";
+  const API_URL = "https://munprepai.onrender.com"; // your backend URL
   const form = document.getElementById("login-form");
   const status = document.getElementById("status");
 
@@ -16,9 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const response = await fetch(`${API_URL}/api/login`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
       });
 
@@ -33,10 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
       status.textContent = "✅ Login successful!";
       status.style.color = "green";
 
-      // Optional: store user info
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      // Redirect after login
       setTimeout(() => {
         window.location.href = "/learn/learn.html";
       }, 1000);
@@ -47,6 +42,4 @@ document.addEventListener("DOMContentLoaded", () => {
       status.style.color = "red";
     }
   });
-
 });
-
