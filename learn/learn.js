@@ -1,13 +1,28 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  // 1️⃣ Get session from localStorage
-  const session = JSON.parse(localStorage.getItem('session'));
-  if (!session?.access_token) {
-    // Not logged in
+
+  // 1️⃣ Safely get session
+  const sessionString = localStorage.getItem('session');
+
+  if (!sessionString) {
+    return window.location.href = '/learn/plslogin.html';
+  }
+
+  let session;
+  try {
+    session = JSON.parse(sessionString);
+  } catch (error) {
+    console.error("Invalid session format:", error);
+    localStorage.removeItem('session');
+    return window.location.href = '/learn/plslogin.html';
+  }
+
+  if (!session.access_token) {
+    localStorage.removeItem('session');
     return window.location.href = '/learn/plslogin.html';
   }
 
   try {
-    // 2️⃣ Verify user session with backend
+    // 2️⃣ Verify session with backend
     const res = await fetch('https://munprepai.onrender.com/api/verify-session', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -17,15 +32,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     const data = await res.json();
 
     if (!res.ok || !data.user) {
-      // Invalid session
+      localStorage.removeItem('session');
       return window.location.href = '/learn/plslogin.html';
     }
 
-    // 3️⃣ Display user email
+    // 3️⃣ Show email
     const emailEl = document.getElementById('user-email');
     if (emailEl) emailEl.textContent = data.user.email;
 
-    // 4️⃣ Dropdown toggle functionality
+    // 4️⃣ Dropdown toggle
     const dropdownToggle = document.getElementById('dropdown-toggle');
     const dropdown = document.getElementById('dropdown');
 
@@ -34,7 +49,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         dropdown.classList.toggle('show');
       });
 
-      // Close dropdown if clicked outside
       window.addEventListener('click', (e) => {
         if (!dropdown.contains(e.target) && e.target !== dropdownToggle) {
           dropdown.classList.remove('show');
@@ -42,20 +56,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     }
 
-    // 5️⃣ Sign out button
+    // 5️⃣ Sign out
     const signoutLink = document.getElementById('signout-link');
     if (signoutLink) {
       signoutLink.addEventListener('click', (e) => {
-        e.preventDefault(); // Prevent <a href="#"> jump
+        e.preventDefault();
         localStorage.removeItem('session');
         window.location.href = '/login/login.html';
       });
     }
 
   } catch (err) {
-    console.error('Session verification error:', err);
-    // Redirect to login if any error
+    console.error("Session verification failed:", err);
+    localStorage.removeItem('session');
     window.location.href = '/learn/plslogin.html';
   }
-});
 
+});
