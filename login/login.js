@@ -1,5 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const API_URL = "https://munprepai.onrender.com";
+
+  const supabaseUrl = "YOUR_SUPABASE_URL";
+  const supabaseAnonKey = "YOUR_ANON_PUBLIC_KEY";
+
+  const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+
   const form = document.getElementById("login-form");
   const status = document.getElementById("status");
 
@@ -12,36 +17,20 @@ document.addEventListener("DOMContentLoaded", () => {
     status.textContent = "Logging in...";
     status.style.color = "black";
 
-    try {
-      const response = await fetch(`${API_URL}/api/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-      });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        status.textContent = data.error || "Login failed.";
-        status.style.color = "red";
-        return;
-      }
-
-      status.textContent = "✅ Login successful!";
-      status.style.color = "green";
-
-      // STORE SESSION, not just user
-      localStorage.setItem("session", JSON.stringify(data.session));
-
-      setTimeout(() => {
-        window.location.href = "/learn/learn.html";
-      }, 1000);
-
-    } catch (error) {
-      console.error("Login error:", error);
-      status.textContent = "Could not connect to server.";
+    if (error) {
+      status.textContent = error.message;
       status.style.color = "red";
+      return;
     }
-  });
-});
 
+    status.textContent = "✅ Login successful!";
+    status.style.color = "green";
+
+    setTimeout(() => {
+      window.location.href = "/learn/learn.html";
+    }, 800);
+  });
+
+});
