@@ -1,54 +1,43 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
-  const sessionString = localStorage.getItem('session');
+  const supabaseUrl = "https://iiopiymqwmrovtkjowpp.supabase.co";
+  const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlpb3BpeW1xd21yb3Z0a2pvd3BwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgwMTE3NTYsImV4cCI6MjA4MzU4Nzc1Nn0.7dcAoTvBq8-JQ9vqGr9KEs9JZf2IrSc0qb1W4WwjvpA";
 
-  if (!sessionString) {
-    return window.location.href = '/learn/plslogin.html';
+  const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+  const { data: { session } } = await supabase.auth.getSession();
+
+  if (!session) {
+    window.location.href = "/login/login.html";
+    return;
   }
 
-  let session;
+  // Show user email
+  const emailEl = document.getElementById("user-email");
+  if (emailEl) emailEl.textContent = session.user.email;
 
-  try {
-    session = JSON.parse(sessionString);
-  } catch (error) {
-    localStorage.removeItem('session');
-    return window.location.href = '/learn/plslogin.html';
-  }
-
-  if (!session || !session.user || !session.access_token) {
-    localStorage.removeItem('session');
-    return window.location.href = '/learn/plslogin.html';
-  }
-
-  // Show email directly from stored session
-  const emailEl = document.getElementById('user-email');
-  if (emailEl) {
-    emailEl.textContent = session.user.email;
-  }
-
-  // Dropdown toggle
-  const dropdownToggle = document.getElementById('dropdown-toggle');
-  const dropdown = document.getElementById('dropdown');
+  // Dropdown
+  const dropdownToggle = document.getElementById("dropdown-toggle");
+  const dropdown = document.getElementById("dropdown");
 
   if (dropdownToggle && dropdown) {
-    dropdownToggle.addEventListener('click', () => {
-      dropdown.classList.toggle('show');
+    dropdownToggle.addEventListener("click", () => {
+      dropdown.classList.toggle("show");
     });
-
-    window.addEventListener('click', (e) => {
+    window.addEventListener("click", (e) => {
       if (!dropdown.contains(e.target) && e.target !== dropdownToggle) {
-        dropdown.classList.remove('show');
+        dropdown.classList.remove("show");
       }
     });
   }
 
   // Sign out
-  const signoutLink = document.getElementById('signout-link');
+  const signoutLink = document.getElementById("signout-link");
   if (signoutLink) {
-    signoutLink.addEventListener('click', (e) => {
+    signoutLink.addEventListener("click", async (e) => {
       e.preventDefault();
-      localStorage.removeItem('session');
-      window.location.href = '/login/login.html';
+      await supabase.auth.signOut();
+      window.location.href = "/login/login.html";
     });
   }
 
