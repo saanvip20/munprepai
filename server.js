@@ -216,7 +216,30 @@ app.post('/api/assess-rebuttal', async (req, res) => {
     return res.status(500).json({ error: 'Failed to assess rebuttal.' });
   }
 });
+// ------------------------
+// VERIFY SESSION
+// ------------------------
+app.post('/api/verify-session', async (req, res) => {
+  const { access_token } = req.body;
 
+  if (!access_token) {
+    return res.status(400).json({ error: 'Access token required.' });
+  }
+
+  try {
+    const { data, error } = await supabase.auth.getUser(access_token);
+
+    if (error || !data.user) {
+      return res.status(401).json({ error: 'Invalid session.' });
+    }
+
+    return res.json({ user: data.user });
+
+  } catch (err) {
+    console.error('Verify session error:', err);
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+});
 // ------------------------
 // TEST ROUTE
 // ------------------------
