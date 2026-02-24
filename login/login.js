@@ -1,9 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   const supabaseUrl = "YOUR_SUPABASE_URL";
-  const supabaseAnonKey = "YOUR_ANON_PUBLIC_KEY";
+  const supabaseAnonKey = "YOUR_SUPABASE_ANON_KEY";
 
-  const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+  const supabaseClient = window.supabase.createClient(
+    supabaseUrl,
+    supabaseAnonKey
+  );
 
   const form = document.getElementById("login-form");
   const status = document.getElementById("status");
@@ -17,7 +20,11 @@ document.addEventListener("DOMContentLoaded", () => {
     status.textContent = "Logging in...";
     status.style.color = "black";
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } =
+      await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
 
     if (error) {
       status.textContent = error.message;
